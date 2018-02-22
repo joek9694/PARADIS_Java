@@ -27,12 +27,6 @@ public class Factorizer2 implements Runnable{
 	}
 	
 	public void run() {
-		/*long number = 0;
-		
-		synchronized(lock) {
-		 number = min++;
-				}
-		*/
 		
 		long number = min; 
 		while (number <= max && !flag) {
@@ -54,8 +48,6 @@ public class Factorizer2 implements Runnable{
 			
 			long start = System.nanoTime();
 			
-			//System.out.println(product);
-			//System.out.println(numOfThreads);
 			
 			Thread[] threads = new Thread[numOfThreads];
 			Factorizer2[] factorizers = new Factorizer2[numOfThreads];
@@ -67,7 +59,7 @@ public class Factorizer2 implements Runnable{
 			
 			
 			for(int i = 0; i < numOfThreads; i++) {
-				threads[i].start();	//fac.run();
+				threads[i].start();	//starts run() in instance of Factorizer2;
 			}
 			
 			long F1 = 0;
@@ -76,10 +68,8 @@ public class Factorizer2 implements Runnable{
 			for(int i = 0; i < numOfThreads; i++) {
 				threads[i].join();
 				
-				//System.out.println(i + ": " + factorizers[i].getF1());
-				//System.out.println(i + ": " + factorizers[i].getF2());
 				
-				if(factorizers[i].getF1() > 0) {	// chose smallest of possible calculations
+				if(factorizers[i].getF1() > 0) {	// chose smallest first factorization of possible calculations
 					if(F1 == 0) {
 						F1 = factorizers[i].getF1();
 						F2 = factorizers[i].getF2();
