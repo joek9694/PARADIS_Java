@@ -18,7 +18,7 @@ class Factorizer2 implements Runnable{
 		
 		//number = min + antalet startade trådar, för att låta olika trådar jobba på olika nummer
 		for(long number = min; number <= max; number = number + step) {
-			synchronized(this){
+			synchronized(this){		// behövd?
 				if (product % number == 0) {
 					factor1 = number;
 					factor2 = product / factor1;
