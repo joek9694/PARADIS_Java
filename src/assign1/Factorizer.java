@@ -31,6 +31,7 @@ public class Factorizer implements Runnable{
 				}
 				number = number + step;
 			}
+			threadCounter++;
 		}
 	}
 	
@@ -69,7 +70,6 @@ public class Factorizer implements Runnable{
 			
 			for(int i = 0; i < numberOfThreads; i++) {
 				threads[i].start();	//fac.run();
-				threadCounter++;
 			}
 			
 			
@@ -84,7 +84,7 @@ public class Factorizer implements Runnable{
 			
 			
 			long stop = System.nanoTime();
-			/*
+			
 			if(factor1 > 3) {
 				System.out.println("factor1 =" + factor1 + ", factor2 = " + factor2);
 				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
@@ -92,7 +92,7 @@ public class Factorizer implements Runnable{
 				System.out.println ("No factorization possible");
 			}
 			
-			*/
+			
 			
 		}catch(Exception exception) {
 			System.out.println(exception);
