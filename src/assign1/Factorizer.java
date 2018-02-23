@@ -20,12 +20,14 @@ public class Factorizer implements Runnable{
 		
 	}
 	
-	boolean isPrime(long n) {
-	    //check if n is a multiple of 2
-	    if (n%2==0) 
+	static boolean isPrime(long n) {
+	    if(n == 2 || n == 3)
+	    	return true;
+	    
+	    if (n%2==0 || n < 2) 
 	    	return false;
 	    
-	    for(long i=3;i*i<=n;i+=2) { //if not, checks the odd numbers
+	    for(long i=3; i*i<=n; i+=2) { //checks odd numbers
 	        if(n%i==0)
 	            return false;
 	    }
@@ -36,31 +38,30 @@ public class Factorizer implements Runnable{
 	public void run() {
 		long number = min;
 		while (number <= max) {
-			if(flag.get()) {
+			if (flag.get()) {		// flag == true == another thread was faster
+				//System.out.println(min - 2 + "; 1st if");	//for testing
 				return;
 			}
+
 			if (product % number == 0 && isPrime(number)) {
-				if(! flag.getAndSet(true)) {
+				
+				if (!flag.getAndSet(true)) {	//commented by return
 					long stop = System.nanoTime();
 					factor1 = number;
 					factor2 = product / factor1;
-					
-					
-					
-					
-					// OBS! isPrime utesluter 2,3 osv... Factorizer2 skriver ut korrekt
-					
-					if(factor1 > 1) {
+
+					if (factor1 > 1) {
 						System.out.println("factor1 =" + factor1 + ", factor2 = " + factor2);
 						System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
-					}else {
-						System.out.println ("No factorization possible");
 					}
+					
 					return;
 				}
 				
-				return;
+				//System.out.println(min - 2 + "; 2nd if"); //for testing
+				return;		// flag == true == another thread was faster
 			}
+			
 			number = number + step;
 		}
 	}
@@ -70,27 +71,31 @@ public class Factorizer implements Runnable{
 		try {
 			long product = Long.parseLong(args[0]);
 			int numOfThreads = Integer.parseInt(args[1]);
+			
+			if(product > 3) {
+				long start = System.nanoTime();
 
-			long start = System.nanoTime();
+				Thread[] threads = new Thread[numOfThreads];
+				Factorizer[] factorizers = new Factorizer[numOfThreads];
+				AtomicBoolean flag = new AtomicBoolean();
 
-			Thread[] threads = new Thread[numOfThreads];
-			Factorizer[] factorizers = new Factorizer[numOfThreads];
-			AtomicBoolean flag = new AtomicBoolean();
+				for (int i = 0; i < numOfThreads; i++) {
+					factorizers[i] = new Factorizer(product, numOfThreads, i, start, flag);
+					threads[i] = new Thread(factorizers[i]);
+				}
 
-			for (int i = 0; i < numOfThreads; i++) {
-				factorizers[i] = new Factorizer(product, numOfThreads, i, start, flag);
-				threads[i] = new Thread(factorizers[i]);
+				for (int i = 0; i < numOfThreads; i++) {
+					threads[i].start(); // starts run() in instance of Factorizer;
+				}
 			}
-
-			for (int i = 0; i < numOfThreads; i++) {
-				threads[i].start(); // starts run() in instance of Factorizer;
+			
+			if(isPrime(product)) {
+				System.out.println ("No factorization possible");
 			}
 
 		} catch (Exception exception) {
 			System.out.println(exception);
 			exception.printStackTrace();
 		}
-
 	}
-
 }

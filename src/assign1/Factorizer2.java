@@ -67,6 +67,8 @@ public class Factorizer2 implements Runnable{
 			
 			for(int i = 0; i < numOfThreads; i++) {
 				threads[i].join();
+				System.out.println(i + ": " + factorizers[i].getF1());
+				System.out.println(i + ": " + factorizers[i].getF2());
 				
 				
 				if(factorizers[i].getF1() > 0) {	// chose smallest as first factorization of possible simultaneous calculations
@@ -83,7 +85,7 @@ public class Factorizer2 implements Runnable{
 			
 			long stop = System.nanoTime();
 			
-			if(F1 > 1) {
+			if(F1 > 2) {
 				System.out.println("factor1 =" + F1 + ", factor2 = " + F2);
 				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
 			}else {
