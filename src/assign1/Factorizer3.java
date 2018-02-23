@@ -3,13 +3,13 @@ package assign1;
 public class Factorizer3 implements Runnable{
 	
 	private long product, factor1, factor2, max, starttime;
-	private int step, min;	//, count // just for tests 
+	private int step, min, count ;// just for tests 
 	private static volatile boolean flag = false;
 	
 	public Factorizer3(long product, int threads, int min, long start) {
 		this.product = product;
 		step = threads;
-		//count = min;		//just for tests
+		count = min;		//just for tests
 		this.min = min + 2;
 		starttime = start;
 		max = (long)Math.ceil(Math.sqrt(product));
@@ -20,8 +20,8 @@ public class Factorizer3 implements Runnable{
 	//just for tests
 	@Override
 	public String toString() {
-		return "" + product + " " + step;
-		//return "Im: " + count;
+		//return "" + product + " " + step;
+		return "Im: " + count;
 	}
 	
 	public void run() {
@@ -29,15 +29,15 @@ public class Factorizer3 implements Runnable{
 		long number = min; 
 		while (number <= max && !flag) {
 			if (product % number == 0) {
+				flag = true;
 				factor1 = number;
 				factor2 = product / factor1;
-				flag = true;
 				this.printResult();
 				return;
 			}
 			number = number + step;
 		}
-		//System.out.println("" + this + "; I went out of loop.");	//just for tests
+		System.out.println("" + this + "; I went out of loop.");	//just for tests
 	}
 	
 	private synchronized void printResult() {
@@ -69,7 +69,7 @@ public class Factorizer3 implements Runnable{
 			}
 			
 			for(int i = 0; i < numOfThreads; i++) {
-				threads[i].start();	//starts run() in instance of Factorizer2;
+				threads[i].start();	//starts run() in instance of Factorizer3;
 			}
 			
 			
