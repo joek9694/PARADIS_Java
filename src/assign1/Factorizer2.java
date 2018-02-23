@@ -69,7 +69,7 @@ public class Factorizer2 implements Runnable{
 				threads[i].join();
 				
 				
-				if(factorizers[i].getF1() > 0) {	// chose smallest first factorization of possible calculations
+				if(factorizers[i].getF1() > 0) {	// chose smallest as first factorization of possible simultaneous calculations
 					if(F1 == 0) {
 						F1 = factorizers[i].getF1();
 						F2 = factorizers[i].getF2();
