@@ -3,14 +3,18 @@ package assign1;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Factorizer implements Runnable{
+/* Not functioning as supposed to, for now... */
+
+
+
+public class Factorizer1 implements Runnable{
 	
 	static int threadCounter = 0;
 	private int step, min;
 	private long product, max, factor1, factor2;
 	private boolean found = false;	//abort-serach-flag ...
 	
-	public Factorizer(long product, int threads) {
+	public Factorizer1(long product, int threads) {
 		this.product = product;
 		this.step = threads;
 		this.max = product;		// kanske effektiviseras till kvadratrot?
@@ -60,11 +64,11 @@ public class Factorizer implements Runnable{
 			//Factorizer fac = new Factorizer(product, numberOfThreads);
 			
 			Thread[] threads = new Thread[numberOfThreads];
-			Factorizer[] factorizers = new Factorizer[numberOfThreads];	//behövs?
+			Factorizer1[] factorizers = new Factorizer1[numberOfThreads];	//behövs?
 			
 			//loop skapa antal trådar enligt input
 			for(int i = 0; i < numberOfThreads; i++) {
-				factorizers[i] = new Factorizer(product, numberOfThreads);
+				factorizers[i] = new Factorizer1(product, numberOfThreads);
 				threads[i] = new Thread(factorizers[i]); // på samma Factorizer.. borde va olika?
 			}
 			
@@ -72,12 +76,15 @@ public class Factorizer implements Runnable{
 				threads[i].start();	//fac.run();
 			}
 			
-			
+			long F1 = 0;
+			long F2 = 0;
 			
 			for(int i = 0; i < numberOfThreads; i++) {
 				threads[i].join();	// väntar på trådar!		FEL PLATS?
 				System.out.println(i + ": " + factorizers[i].getF1());
 				System.out.println(i + ": " + factorizers[i].getF2());
+				 F1 = factorizers[i].getF1();
+				 F2 = factorizers[i].getF2();
 				
 			}
 			
@@ -85,8 +92,8 @@ public class Factorizer implements Runnable{
 			
 			long stop = System.nanoTime();
 			
-			if(factor1 > 3) {
-				System.out.println("factor1 =" + factor1 + ", factor2 = " + factor2);
+			if(F1 > 3) {
+				System.out.println("factor1 =" + F1 + ", factor2 = " + F2);
 				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
 			}else {
 				System.out.println ("No factorization possible");
