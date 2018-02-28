@@ -5,37 +5,44 @@ package assign2;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 
 // TODO: Make this class thread-safe and as performant as possible.
-class Bank {
+class Bank2 {
 	// Instance variables.
 	private int accountCounter = 0;
-	private ConcurrentHashMap<Integer, Account> accounts = new ConcurrentHashMap<Integer, Account>();
-	
+	private Map<Integer, Account> accounts = new HashMap<Integer, Account>();
+	private Object idLock = new Object();
 	// Instance methods.
 
 	int newAccount(int balance) {
-		int accountId = accountCounter++;
+		int accountId;
+		synchronized (idLock){accountId = accountCounter++;}
 		Account account = new Account(accountId, balance);
-		accounts.put(accountId, account);
+		synchronized(accounts) {
+			accounts.put(accountId, account);
+		}
+		
 		return accountId;
 	}
 	
 	int getAccountBalance(int accountId) {
-		Account acc = accounts.get(accountId);
-		synchronized(acc) {
-			return acc.getBalance();
+		Account acc;
+		synchronized(accounts) {
+			acc = accounts.get(accountId);
 		}
+		
+		synchronized(acc) {return acc.getBalance();}
 	}
 	
 	void runOperation(Operation operation) {
-		Account account = accounts.get(operation.getAccountId());
-		synchronized(account) {
-			account.setBalance(account.getBalance() + operation.getAmount());	
-		}
+		Account account;
+		synchronized (accounts) {account = accounts.get(operation.getAccountId());}
+		int balance;
+		synchronized (account) {balance = account.getBalance();
 		
+		account.setBalance(balance + operation.getAmount());
+		}
 	}
 		
 	// TODO: If you are not aiming for grade VG you should remove this method.
@@ -50,6 +57,4 @@ class Bank {
 		}
 	}
 }
-
-
 
