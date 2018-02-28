@@ -26,36 +26,11 @@ public class Factorizer2 implements Runnable{
 		return "" + product + " " + step;
 	}
 	
-	public static boolean isPrime(long n) {
-        if (n <= 1) {
-            return false;
-        }
-        if (n == 2) {
-            return true;
-        }
-        if (n % 2 == 0) {
-            return false;
-        }
-        for (long i = 3; i <= Math.sqrt(n) + 1; i = i + 2) {
-            if (n % i == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-	
 	public void run() {
-		/*long number = 0;
-		
-		synchronized(lock) {
-		 number = min++;
-				}
-		*/
 		
 		long number = min; 
 		while (number <= max && !flag) {
-			if (product % number == 0 && isPrime(number)) {
+			if (product % number == 0) {
 				factor1 = number;
 				factor2 = product / factor1;
 				flag = true;
@@ -73,8 +48,6 @@ public class Factorizer2 implements Runnable{
 			
 			long start = System.nanoTime();
 			
-			//System.out.println(product);
-			//System.out.println(numOfThreads);
 			
 			Thread[] threads = new Thread[numOfThreads];
 			Factorizer2[] factorizers = new Factorizer2[numOfThreads];
@@ -86,7 +59,7 @@ public class Factorizer2 implements Runnable{
 			
 			
 			for(int i = 0; i < numOfThreads; i++) {
-				threads[i].start();	//fac.run();
+				threads[i].start();	//starts run() in instance of Factorizer2;
 			}
 			
 			long F1 = 0;
@@ -94,11 +67,11 @@ public class Factorizer2 implements Runnable{
 			
 			for(int i = 0; i < numOfThreads; i++) {
 				threads[i].join();
+				System.out.println(i + ": " + factorizers[i].getF1());
+				System.out.println(i + ": " + factorizers[i].getF2());
 				
-				//System.out.println(i + ": " + factorizers[i].getF1());
-				//System.out.println(i + ": " + factorizers[i].getF2());
 				
-				if(factorizers[i].getF1() > 0) {	// chose smallest of possible calculations
+				if(factorizers[i].getF1() > 0) {	// chose smallest as first factorization of possible simultaneous calculations
 					if(F1 == 0) {
 						F1 = factorizers[i].getF1();
 						F2 = factorizers[i].getF2();
@@ -112,7 +85,7 @@ public class Factorizer2 implements Runnable{
 			
 			long stop = System.nanoTime();
 			
-			if(F1 > 1 ) {
+			if(F1 > 2) {
 				System.out.println("factor1 =" + F1 + ", factor2 = " + F2);
 				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
 			}else {
@@ -125,3 +98,4 @@ public class Factorizer2 implements Runnable{
 		}
 	}
 }
+

@@ -1,104 +1,101 @@
 package assign1;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Factorizer implements Runnable{
 	
-	static int threadCounter = 0;
-	private int step, min;
-	private long product, max, factor1, factor2;
-	private boolean found = false;	//abort-serach-flag ...
+	private final long product, max, start;
+	private long factor1, factor2;
+	private final int step, min;
+	private AtomicBoolean flag;
 	
-	public Factorizer(long product, int threads) {
+	
+	public Factorizer(long product, int step, int min, long start, AtomicBoolean flag) {
 		this.product = product;
-		this.step = threads;
-		this.max = product;		// kanske effektiviseras till kvadratrot?
-		this.min = 4;			// ? 4 är minsta intressanta ?
-		this.factor1 = 0;
-		this.factor2 = 0;
+		this.step = step;
+		this.min = min +2;
+		this.flag = flag;
+		this.start = start;
+		this.max = (long)Math.ceil(Math.sqrt(product));
+		
 	}
 	
-	public void run() {			// ska va utan argument
-		synchronized(this) {
-			long number = min + threadCounter; //  - threadCounter?
-			while (number <= max) {
-				if (product % number == 0) {
-					found = true;
-					this.factor1 = number;
-					this.factor2 = product / this.factor1;
+	static boolean isPrime(long n) {
+	    if(n == 2 || n == 3)
+	    	return true;
+	    
+	    if (n%2==0 || n < 2) 
+	    	return false;
+	    
+	    for(long i=3; i*i<=n; i+=2) { //checks odd numbers
+	        if(n%i==0)
+	            return false;
+	    }
+	    return true;
+	}
+	
+	@Override
+	public void run() {
+		long number = min;
+		while (number <= max) {
+			if (flag.get()) {		// flag == true == another thread was faster
+				//System.out.println(min - 2 + "; 1st if");	//for testing
+				return;
+			}
+
+			if (product % number == 0 && isPrime(number)) {
+				
+				if (!flag.getAndSet(true)) {	//commented by return
+					long stop = System.nanoTime();
+					factor1 = number;
+					factor2 = product / factor1;
+
+					if (factor1 > 1) {
+						System.out.println("factor1 =" + factor1 + ", factor2 = " + factor2);
+						System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
+					}
+					
 					return;
 				}
-				number = number + step;
+				
+				//System.out.println(min - 2 + "; 2nd if"); //for testing
+				return;		// flag == true == another thread was faster
 			}
-			threadCounter++;
+			
+			number = number + step;
 		}
 	}
 	
-	public long getF1(){
-		return this.factor1;
-	}
-	
-	public long getF2(){
-		return this.factor2;
-	}
-
 	
 	public static void main(String[] args) {
 		try {
+			long product = Long.parseLong(args[0]);
+			int numOfThreads = Integer.parseInt(args[1]);
 			
-			BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("Input (product)>");
-			String input = consoleReader.readLine();
-			System.out.println("input was: " + input);
-			long product = Long.parseLong(input);
-			System.out.print("Input (Number of threads)>");
-			int numberOfThreads = Integer.parseInt(consoleReader.readLine());
-			System.out.println("input was: " + numberOfThreads);
-			long start = System.nanoTime();
-			
-			//Factorizer fac = new Factorizer(product, numberOfThreads);
-			
-			Thread[] threads = new Thread[numberOfThreads];
-			Factorizer[] factorizers = new Factorizer[numberOfThreads];	//behövs?
-			
-			//loop skapa antal trådar enligt input
-			for(int i = 0; i < numberOfThreads; i++) {
-				factorizers[i] = new Factorizer(product, numberOfThreads);
-				threads[i] = new Thread(factorizers[i]); // på samma Factorizer.. borde va olika?
+			if(product > 3) {
+				long start = System.nanoTime();
+
+				Thread[] threads = new Thread[numOfThreads];
+				Factorizer[] factorizers = new Factorizer[numOfThreads];
+				AtomicBoolean flag = new AtomicBoolean();
+
+				for (int i = 0; i < numOfThreads; i++) {
+					factorizers[i] = new Factorizer(product, numOfThreads, i, start, flag);
+					threads[i] = new Thread(factorizers[i]);
+				}
+
+				for (int i = 0; i < numOfThreads; i++) {
+					threads[i].start(); // starts run() in instance of Factorizer;
+				}
 			}
 			
-			for(int i = 0; i < numberOfThreads; i++) {
-				threads[i].start();	//fac.run();
-			}
-			
-			
-			
-			for(int i = 0; i < numberOfThreads; i++) {
-				threads[i].join();	// väntar på trådar!		FEL PLATS?
-				System.out.println(i + ": " + factorizers[i].getF1());
-				System.out.println(i + ": " + factorizers[i].getF2());
-				
-			}
-			
-			
-			
-			long stop = System.nanoTime();
-			
-			if(factor1 > 3) {
-				System.out.println("factor1 =" + factor1 + ", factor2 = " + factor2);
-				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
-			}else {
+			if(isPrime(product)) {
 				System.out.println ("No factorization possible");
 			}
-			
-			
-			
-		}catch(Exception exception) {
+
+		} catch (Exception exception) {
 			System.out.println(exception);
 			exception.printStackTrace();
 		}
-		
-		
 	}
 }
