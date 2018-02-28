@@ -22,7 +22,8 @@ class Bank {
 		int accountId;
 		synchronized (idLock){accountId = accountCounter++;}	//Synchronized so that 
 		//no risk of multiple threads accessing value of accountCounter at close to the same time whereby adding
-		// twice would result in +1 instead of +2 and also that one of the threads would have the wrong value.
+		// twice would result in overwriting the first add-operation with the second one and that 
+		//the threads would each save the same accountId.
 		Account account = new Account(accountId, balance);
 		accounts.put(accountId, account);	//Is synchronized through the locking mechanism of ConcurrentHashMap
 		return accountId;
@@ -42,8 +43,7 @@ class Bank {
 			// + operation kept within synchronized block since I have a hard time seeing whether
 			// lifting it out would actually save and time.
 			account.setBalance(account.getBalance() + operation.getAmount());	
-		}
-		
+		}	
 	}
 		
 	// TODO: If you are not aiming for grade VG you should remove this method.
