@@ -2,6 +2,10 @@ package assign1;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/* By: joek9694 - Johan Eklundh
+ * 
+ */
+
 public class Factorizer implements Runnable{
 	
 	private final long product, max, start;
