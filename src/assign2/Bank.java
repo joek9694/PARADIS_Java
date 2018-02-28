@@ -14,10 +14,13 @@ class Bank {
 	private int accountCounter = 0;
 	private ConcurrentHashMap<Integer, Account> accounts = new ConcurrentHashMap<Integer, Account>();
 	
+	private Object idLock = new Object();	//..
+	private Object accLock = new Object();
 	// Instance methods.
 
 	int newAccount(int balance) {
-		int accountId = accountCounter++;
+		int accountId;
+		synchronized (idLock){accountId = accountCounter++;}	//...
 		Account account = new Account(accountId, balance);
 		accounts.put(accountId, account);
 		return accountId;
@@ -46,7 +49,9 @@ class Bank {
 		Account account = null;
 		for (int i = 0; i < operations.size(); i++) {
 			account = accounts.get(operations.get(i).getAccountId());
-			account.setBalance(account.getBalance() + operations.get(i).getAmount());
+			synchronized(account) {
+				account.setBalance(account.getBalance() + operations.get(i).getAmount());	
+			}
 		}
 	}
 }
