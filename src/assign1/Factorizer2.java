@@ -26,6 +26,25 @@ public class Factorizer2 implements Runnable{
 		return "" + product + " " + step;
 	}
 	
+	public static boolean isPrime(long n) {
+        if (n <= 1) {
+            return false;
+        }
+        if (n == 2) {
+            return true;
+        }
+        if (n % 2 == 0) {
+            return false;
+        }
+        for (long i = 3; i <= Math.sqrt(n) + 1; i = i + 2) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+	
 	public void run() {
 		/*long number = 0;
 		
@@ -36,7 +55,7 @@ public class Factorizer2 implements Runnable{
 		
 		long number = min; 
 		while (number <= max && !flag) {
-			if (product % number == 0) {
+			if (product % number == 0 && isPrime(number)) {
 				factor1 = number;
 				factor2 = product / factor1;
 				flag = true;
@@ -93,7 +112,7 @@ public class Factorizer2 implements Runnable{
 			
 			long stop = System.nanoTime();
 			
-			if(F1 > 1) {
+			if(F1 > 1 ) {
 				System.out.println("factor1 =" + F1 + ", factor2 = " + F2);
 				System.out.println("Execution time (seconds): " + (stop - start) / 1.0E9);
 			}else {
