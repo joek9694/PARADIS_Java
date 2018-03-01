@@ -36,12 +36,15 @@ class Bank {
 		List<Integer> accountIds = transaction.getAccountIds();
 		List<Operation> operations = transaction.getOperations();
 		Map<Integer, Integer> balances = new HashMap<>();
-		synchronized(accountIds) {
+		
+		synchronized(accountIds) {	// doesn't make sense..?
 			
 			for(int i = 0; i < accountIds.size(); i ++) {	//kan kanske hjälpa för rollback?
-				
+				Account acc = accounts.get(accountIds.get(i));
+				balances.put(acc.getId(), acc.getBalance());
 			}
 			
+			//genomför all transaktioner
 			Account account = null;
 			for (int i = 0; i < operations.size(); i++) {
 				account = accounts.get(operations.get(i).getAccountId());
@@ -49,6 +52,7 @@ class Bank {
 				account.setBalance(account.getBalance() + operations.get(i).getAmount());
 			}
 			
+			//jämför mot balances?
 		}
 		
 		
