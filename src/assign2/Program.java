@@ -100,12 +100,21 @@ public class Program {
 			exception.printStackTrace();
 		}
 	}
+	private static void runOperation() {
+		bank.runOperation(new Operation(bank, accountIds[0], +100));
+		
+		for (int i = 0; i < NUM_ACCOUNTS; i++) {
+			int balance = bank.getAccountBalance(accountIds[i]);
+			System.out.println("Account: " + accountIds[i] + "; Balance: " + balance);
+		}
+	}
 	
 	// Entry point.
 	public static void main(String[] args) {
 		initiate();
-		runTestOperations();
-		runTestTransactions();
+		//runTestOperations();
+		//runTestTransactions();
+		runOperation();
 	}
 }
 
