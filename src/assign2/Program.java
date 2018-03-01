@@ -16,7 +16,7 @@ public class Program {
 	private static Integer[] accountIds = new Integer[NUM_ACCOUNTS];
 	private static Operation[] withdrawals = new Operation[NUM_ACCOUNTS];
 	private static Operation[] deposits = new Operation[NUM_ACCOUNTS];
-	private static Bank bank = new Bank();
+	private static Bank1 bank = new Bank1();
 	
 	// Static methods.
 

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 // TODO: Make this class thread-safe and as performant as possible.
 @ThreadSafe()
-class Bank {
+class Bank1 {
 	// Instance variables.
 	@GuardedBy("idLock")
 	private int accountCounter = 0;

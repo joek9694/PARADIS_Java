@@ -8,9 +8,9 @@ import java.util.List;
 class Transaction implements Runnable {
 	private List<Operation> operations = new ArrayList<Operation>();
 	private List<Integer> accountIds = new ArrayList<Integer>();
-	private final Bank bank;
+	private final Bank1 bank;
 	
-	Transaction(Bank bank) {
+	Transaction(Bank1 bank) {
 		this.bank = bank;
 	}
 
