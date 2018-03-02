@@ -5,9 +5,9 @@ package assign2;
 class Operation implements Runnable {
 	final int ACCOUNT_ID;
 	final int AMOUNT;
-	private final Bank1 bank;
+	private final Bank bank;
 	
-	Operation(Bank1 bank, int accountId, int amount) {
+	Operation(Bank bank, int accountId, int amount) {
 		ACCOUNT_ID = accountId;
 		AMOUNT = amount;
 		this.bank = bank;

@@ -1,6 +1,6 @@
 package assign2;
 
-// By: joek9694 - Johan Eklundh
+// By: joek9694 - Johan Eklundh 
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +14,6 @@ class Bank1 {
 	
 	// ConcurrentHashMap so that no race conditions towards put or get could occur.
 	private ConcurrentHashMap<Integer, Account> accounts = new ConcurrentHashMap<Integer, Account>();
-	
 	private Object idLock = new Object();	//Guarding accountCounter
 	
 	// Instance methods.
@@ -31,8 +30,10 @@ class Bank1 {
 	
 	int getAccountBalance(int accountId) {
 		Account acc = accounts.get(accountId);
-		synchronized(acc) {	// synchronized so that, no two threads could try to getBalance 
-			// or setBalance of the same account at the same time. 
+		synchronized(acc) {	// synchronized (even though the Program doesn't use it in a way that jeopardizes
+			// thread safety and that account.setBalance() is never used within this class
+			// outside of the runOperation and runTransaction()) so that, no two threads could try to getBalance 
+			// or setBalance of the same account at the same time using this class. 
 			return acc.getBalance();
 		}
 	}
@@ -47,19 +48,32 @@ class Bank1 {
 	}
 		
 	// TODO: If you are not aiming for grade VG you should remove this method.
+	
+	// Since there is no explicit requirement of possible role-backs of transactions there is no need to 
+	// lock a transaction so that another thread can't make an operation on an account that is apart of the ongoing
+	// transaction unless the two threads are trying to access the same account at the same time, therefore 
+	// the solution of lock account/ operation holds in this method as well. This solution should in fact have faster 
+	// performance for the overall use of bank than another possible solution of locking so that no two transactions
+	// could occur at the same time.
 	void runTransaction(Transaction transaction) {
 		
 		List<Operation> operations = transaction.getOperations();
 
-		Account account = null;
+		
 		for (int i = 0; i < operations.size(); i++) {
-			account = accounts.get(operations.get(i).getAccountId()); // Synchronized through ConcurrentHashMap as described above.
-			synchronized(account) {	// Synchronized on the actual account as described above.
-				account.setBalance(account.getBalance() + operations.get(i).getAmount());	
-			}
+			
+			runOperation(operations.get(i));	// Synchronized as described by runOperation().
+			
+			
 		}
 	}
 }
+/*
+Account account = null;
 
-
+account = accounts.get(operations.get(i).getAccountId()); // Synchronized through ConcurrentHashMap as described above.
+synchronized(account) {	// Synchronized on the actual account as described by runOperation().
+	account.setBalance(account.getBalance() + operations.get(i).getAmount());	
+}
+*/
 

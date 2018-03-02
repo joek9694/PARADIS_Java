@@ -16,7 +16,7 @@ public class Program {
 	private static Integer[] accountIds = new Integer[NUM_ACCOUNTS];
 	private static Operation[] withdrawals = new Operation[NUM_ACCOUNTS];
 	private static Operation[] deposits = new Operation[NUM_ACCOUNTS];
-	private static Bank1 bank = new Bank1();
+	private static Bank bank = new Bank();
 	
 	// Static methods.
 
@@ -100,21 +100,24 @@ public class Program {
 			exception.printStackTrace();
 		}
 	}
-	private static void runOperation() {
+
+	
+	
+	/*private static void runOperation() {
 		bank.runOperation(new Operation(bank, accountIds[0], +100));
 		
 		for (int i = 0; i < NUM_ACCOUNTS; i++) {
 			int balance = bank.getAccountBalance(accountIds[i]);
 			System.out.println("Account: " + accountIds[i] + "; Balance: " + balance);
 		}
-	}
+	}	*/
 	
 	// Entry point.
 	public static void main(String[] args) {
 		initiate();
-		//runTestOperations();
-		//runTestTransactions();
-		runOperation();
+		runTestOperations();
+		runTestTransactions();
+		//runOperation();
 	}
 }
 
