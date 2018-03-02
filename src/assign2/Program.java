@@ -16,21 +16,21 @@ public class Program {
 	private static Integer[] accountIds = new Integer[NUM_ACCOUNTS];
 	private static Operation[] withdrawals = new Operation[NUM_ACCOUNTS];
 	private static Operation[] deposits = new Operation[NUM_ACCOUNTS];
-	private static Bank bank = new Bank();
+	private static BankTest BankTest = new BankTest();
 	
 	// Static methods.
 
 	private static void initiate() {
 		for (int i = 0; i < NUM_ACCOUNTS; i++) {
-			accountIds[i] = bank.newAccount(1000);
+			accountIds[i] = BankTest.newAccount(1000);
 		}
 		
 		for (int i = 0; i < NUM_ACCOUNTS; i++) {
-			withdrawals[i] = new Operation(bank, accountIds[i], -100);;
+			withdrawals[i] = new Operation(BankTest, accountIds[i], -100);;
 		}
 		
 		for (int i = 0; i < NUM_ACCOUNTS; i++) {
-			deposits[i] = new Operation(bank, accountIds[i], +100);;
+			deposits[i] = new Operation(BankTest, accountIds[i], +100);;
 		}
 	}
 	
@@ -58,7 +58,7 @@ public class Program {
 			System.out.println("Time [ms]: " + time / 1000000);
 			
 			for (int i = 0; i < NUM_ACCOUNTS; i++) {
-				int balance = bank.getAccountBalance(accountIds[i]);
+				int balance = BankTest.getAccountBalance(accountIds[i]);
 				System.out.println("Account: " + accountIds[i] + "; Balance: " + balance);
 			}
 		}
@@ -73,7 +73,7 @@ public class Program {
 		
 		Transaction[] transactions = new Transaction[NUM_TRANSACTIONS];
 		for (int i = 0; i < NUM_TRANSACTIONS; i++) {
-			transactions[i] = new Transaction(bank);
+			transactions[i] = new Transaction(BankTest);
 			transactions[i].add(withdrawals[i % NUM_ACCOUNTS]);
 			transactions[i].add(deposits[(i + 1) % NUM_ACCOUNTS]);
 		}
@@ -92,7 +92,7 @@ public class Program {
 			System.out.println("Time [ms]: " + time / 1000000);
 			
 			for (int i = 0; i < NUM_ACCOUNTS; i++) {
-				int balance = bank.getAccountBalance(accountIds[i]);
+				int balance = BankTest.getAccountBalance(accountIds[i]);
 				System.out.println("Account: " + accountIds[i] + "; Balance: " + balance);
 			}
 		}
@@ -104,10 +104,10 @@ public class Program {
 	
 	
 	/*private static void runOperation() {
-		bank.runOperation(new Operation(bank, accountIds[0], +100));
+		BankTest.runOperation(new Operation(BankTest, accountIds[0], +100));
 		
 		for (int i = 0; i < NUM_ACCOUNTS; i++) {
-			int balance = bank.getAccountBalance(accountIds[i]);
+			int balance = BankTest.getAccountBalance(accountIds[i]);
 			System.out.println("Account: " + accountIds[i] + "; Balance: " + balance);
 		}
 	}	*/

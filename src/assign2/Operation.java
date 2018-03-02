@@ -5,12 +5,12 @@ package assign2;
 class Operation implements Runnable {
 	final int ACCOUNT_ID;
 	final int AMOUNT;
-	private final Bank bank;
+	private final BankTest BankTest;
 	
-	Operation(Bank bank, int accountId, int amount) {
+	Operation(BankTest BankTest, int accountId, int amount) {
 		ACCOUNT_ID = accountId;
 		AMOUNT = amount;
-		this.bank = bank;
+		this.BankTest = BankTest;
 	}
 	
 	int getAccountId() {
@@ -22,6 +22,6 @@ class Operation implements Runnable {
 	}
 	
 	public void run() {
-		bank.runOperation(this);
+		BankTest.runOperation(this);
 	}
 }	

@@ -20,9 +20,9 @@ class Bank1 {
 	int newAccount(int balance) {
 		int accountId;
 		synchronized (idLock){accountId = accountCounter++;}	//Synchronized so that 
-		//no risk of multiple threads accessing value of accountCounter at close to the same time whereby adding
+		// no risk of multiple threads accessing value of accountCounter at close to the same time whereby adding
 		// twice would result in overwriting the first add-operation with the second one and that 
-		//the threads would each save the same accountId.
+		// the threads would each save the same accountId.
 		Account account = new Account(accountId, balance);
 		accounts.put(accountId, account);	//Is synchronized through the locking mechanism of ConcurrentHashMap
 		return accountId;

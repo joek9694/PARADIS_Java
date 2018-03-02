@@ -8,10 +8,10 @@ import java.util.List;
 class Transaction implements Runnable {
 	private List<Operation> operations = new ArrayList<Operation>();
 	private List<Integer> accountIds = new ArrayList<Integer>();
-	private final Bank bank;
+	private final BankTest BankTest;
 	
-	Transaction(Bank bank) {
-		this.bank = bank;
+	Transaction(BankTest BankTest) {
+		this.BankTest = BankTest;
 	}
 
 	void add(Operation operation) {
@@ -28,6 +28,6 @@ class Transaction implements Runnable {
 	}
 	
 	public void run() {
-		bank.runTransaction(this);
+		BankTest.runTransaction(this);
 	}
 }	
