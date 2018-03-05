@@ -5,15 +5,12 @@
 
 package assign3;
 
-import java.util.concurrent.ArrayBlockingQueue;
 // [You are welcome to add some import statements.]
-import java.util.concurrent.BlockingQueue;
 
-public class ProgramTest {
+public class ProgramOriginal {
 	final static int NUM_WEBPAGES = 40;
 	private static WebPage[] webPages = new WebPage[NUM_WEBPAGES];
 	// [You are welcome to add some variables.]
-	private BlockingQueue<WebPage> block = new ArrayBlockingQueue<WebPage>(NUM_WEBPAGES);	//The size should be reasonably easy to handle since NUM_WEBPAGES is 40
 
 	// [You are welcome to modify this method, but it should NOT be parallelized.]
 	private static void initialize() {
