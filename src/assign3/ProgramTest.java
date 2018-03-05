@@ -5,82 +5,15 @@
 
 package assign3;
 
-import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 // [You are welcome to add some import statements.]
 import java.util.concurrent.BlockingQueue;
 
-public class Program {
+public class ProgramTest {
 	final static int NUM_WEBPAGES = 40;
 	private static WebPage[] webPages = new WebPage[NUM_WEBPAGES];
 	// [You are welcome to add some variables.]
 	private BlockingQueue<WebPage> block = new ArrayBlockingQueue<WebPage>(NUM_WEBPAGES);	//The size should be reasonably easy to handle since NUM_WEBPAGES is 40
-	
-	
-	private class Producer implements Runnable {
-		private BlockingQueue<WebPage> block;
-		
-		Producer(BlockingQueue<WebPage> block){
-			this.block = block;
-		}
-		
-		@Override
-		public void run() {
-			while(true) {
-				try {
-					Task task = produce();
-					block.put(task);
-				}catch(Exception exc) {
-					System.out.println(exc);
-				}
-				
-			}
-			
-		}
-		
-		Task produce() {
-			Random random = new Random();
-			try {
-				Thread.sleep(random.nextInt(1000));
-			}catch(Exception exc) {
-				System.out.println(exc);
-			}
-			return new Task("Hello!");
-		}
-		
-		
-	}
-	
-	private class Consumer implements Runnable{
-		private BlockingQueue<WebPage> block;
-		private Random random = new Random();
-		
-		Consumer(BlockingQueue<WebPage> block){
-			this.block = block;
-		}
-
-		@Override
-		public void run() {
-			while(true) {
-				try {
-					WebPage page = block.take();
-					consume(page);
-				}catch(Exceptino exc) {
-					System.out.println(exc);
-				}
-			}
-		}
-		
-		void consume(WebPage page){
-			try {
-				Thread.sleep(random.nextInt(1000));
-			}catch(Exception exc) {
-				System.out.println(exc);
-			}
-			System.out.println(task.getData());
-		}
-		
-	}
 
 	// [You are welcome to modify this method, but it should NOT be parallelized.]
 	private static void initialize() {
@@ -105,7 +38,7 @@ public class Program {
 		
 		//Executors.newFixedThreadPool(4)
 		
-		// [Do modify this sequential part of the program.]
+		// [Do modify this sequential part of the ProgramTest.]
 		for (int i = 0; i < NUM_WEBPAGES; i++)
 			webPages[i].download();
 		
