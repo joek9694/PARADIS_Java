@@ -7,7 +7,6 @@
 
 package assign3;
 
-import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 // [You are welcome to add some import statements.]
 import java.util.concurrent.BlockingQueue;
