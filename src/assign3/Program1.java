@@ -1,5 +1,7 @@
 // Peter Idestam-Almquist, 2018-02-26.
-// [Replace this comment with your own name.]
+
+//	By: joek9694 - Johan Eklundh
+// Producer - Consumer pattern
 
 // [Do necessary modifications of this file.]
 
@@ -31,7 +33,7 @@ public class Program1 {
 
 		@Override
 		public void run() {
-			WebPage page = webPages[id];
+			WebPage page = webPages[id];	// don't need synchronize because of ID !?
 			try {
 				block.put(page);
 			} catch (InterruptedException e) {
@@ -41,6 +43,9 @@ public class Program1 {
 	}
 	
 	// ---------------------------------------------- CONSUMER ---------------------------------------------------//
+	// This class should maybe in a real implementation only do one of the methods, and act as a producer after the job was done if that
+	// method was not categorize. In that way certain tasks could be performed in another thread while for example download took its sweet time
+	// to finish up in a certain thread.
 	class Consumer implements Runnable {
 		private BlockingQueue<WebPage> block;
 		
@@ -52,7 +57,7 @@ public class Program1 {
 		public void run() {
 			
 			try {
-				WebPage page = block.take();
+				WebPage page = block.take();	// synchronized through BlockingQueue
 				page.download();
 				page.analyze();
 				page.categorize();
