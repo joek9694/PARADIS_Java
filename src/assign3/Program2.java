@@ -1,9 +1,11 @@
 // Peter Idestam-Almquist, 2018-02-26.
-// [Replace this comment with your own name.]
+
+// By: joek9694 - Johan Eklundh
+// Parallel stream.
 
 // [Do necessary modifications of this file.]
 
-package assign3;
+package assign3;	// OBS! paradis.assignment3		FIXME
 
 import java.util.stream.Stream;
 
