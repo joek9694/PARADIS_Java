@@ -82,17 +82,17 @@ public class Program3 {
 			future4 =
 					future3.thenAccept((x)-> categorize(x));
 					//.thenAccept(System.out.println());
-			
+			try {
+				future4.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
-		try {
-			future4.get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		// Stop timing.
 		long stop = System.nanoTime();
